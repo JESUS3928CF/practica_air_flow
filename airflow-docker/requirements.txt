@@ -1,0 +1,2 @@
+apache-airflow-providers-myslq==4.0.0
+pandas==1.0.2

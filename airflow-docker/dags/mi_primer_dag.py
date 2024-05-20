@@ -11,18 +11,18 @@ from airflow.operators.python import PythonOperator #* Este es para ejecutar cod
 TAGS = ['DeveloperJesus'] #un tag que nos permitirá filtrarlo después
 DAG_ID = "MI_PRIMER_DAG" # NOMBRE EN EL QUE SALE EN EL AMBIENTE
 DAG_DESCRIPTION = """ MI_PRIMER_DAG para el curso de airflow """
-DAG_SCHEDULE = "40 20 * * *"  # Un intervalo de tiempo Todos los días a las 7:42 PM 
+DAG_SCHEDULE = "14 04 * * *"  # Un intervalo de tiempo Todos los días a las 7:42 PM 
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2024, 5, 13), # fecha de su primera ejecución
+    'start_date': datetime(2024, 5, 13), 
     'email_on_failure': False,
     'email_on_retry': False,
+    'retries': 4, 
+    'retry_delay': timedelta(minutes=5), 
 
-    #* estableemos los reintentos, esto se puede hacer por aca parece
-    'retries': 4, # numero de reintentos
-    'retry_delay': timedelta(minutes=5), # el periodo te tiempo que va a esperar para rehacer cada reintento 
+    
 }
 
 #* estableemos los reintentos

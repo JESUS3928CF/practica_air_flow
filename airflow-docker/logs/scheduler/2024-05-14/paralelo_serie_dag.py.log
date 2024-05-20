@@ -226,3 +226,17 @@
 [2024-05-14T03:53:36.860+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:53:36.860+0000] {dag.py:3096} INFO - Sync 1 DAGs
 [2024-05-14T03:53:36.881+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:53:36.881+0000] {dag.py:3954} INFO - Setting next_dagrun for TAREAS_EN_PARALELO_Y_EN_SERIE to 2024-05-13 19:42:00+00:00, run_after=2024-05-14 19:42:00+00:00
 [2024-05-14T03:53:36.901+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/paralelo_serie_dag.py took 0.081 seconds
+[2024-05-14T03:54:07.459+0000] {processor.py:161} INFO - Started process (PID=1906) to work on /opt/airflow/dags/paralelo_serie_dag.py
+[2024-05-14T03:54:07.460+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/paralelo_serie_dag.py for tasks to queue
+[2024-05-14T03:54:07.464+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:54:07.463+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/paralelo_serie_dag.py
+[2024-05-14T03:54:07.489+0000] {processor.py:840} INFO - DAG(s) 'TAREAS_EN_PARALELO_Y_EN_SERIE' retrieved from /opt/airflow/dags/paralelo_serie_dag.py
+[2024-05-14T03:54:07.526+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:54:07.525+0000] {dag.py:3096} INFO - Sync 1 DAGs
+[2024-05-14T03:54:07.564+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:54:07.564+0000] {dag.py:3954} INFO - Setting next_dagrun for TAREAS_EN_PARALELO_Y_EN_SERIE to 2024-05-13 19:42:00+00:00, run_after=2024-05-14 19:42:00+00:00
+[2024-05-14T03:54:07.594+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/paralelo_serie_dag.py took 0.143 seconds
+[2024-05-14T03:54:37.635+0000] {processor.py:161} INFO - Started process (PID=1966) to work on /opt/airflow/dags/paralelo_serie_dag.py
+[2024-05-14T03:54:37.636+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/paralelo_serie_dag.py for tasks to queue
+[2024-05-14T03:54:37.637+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:54:37.637+0000] {dagbag.py:540} INFO - Filling up the DagBag from /opt/airflow/dags/paralelo_serie_dag.py
+[2024-05-14T03:54:37.653+0000] {processor.py:840} INFO - DAG(s) 'TAREAS_EN_PARALELO_Y_EN_SERIE' retrieved from /opt/airflow/dags/paralelo_serie_dag.py
+[2024-05-14T03:54:37.672+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:54:37.672+0000] {dag.py:3096} INFO - Sync 1 DAGs
+[2024-05-14T03:54:37.695+0000] {logging_mixin.py:188} INFO - [2024-05-14T03:54:37.695+0000] {dag.py:3954} INFO - Setting next_dagrun for TAREAS_EN_PARALELO_Y_EN_SERIE to 2024-05-13 19:42:00+00:00, run_after=2024-05-14 19:42:00+00:00
+[2024-05-14T03:54:37.721+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/paralelo_serie_dag.py took 0.091 seconds

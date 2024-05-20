@@ -1,0 +1,73 @@
+version: "3.7"
+
+  #/  Lo primero que vemos son algunas variables, es una caracteristica muy vacana y es que puede cojer la configuración desde las variables del sistema operativo 
+x-airflow-environment: &airflow-environment
+  AIRFLOW__CORE__EXECUTOR: LocalExecutor #- esto es para que se puedan ejecutar las tareas en paralelo
+  AIRFLOW__CORE__LOAD_EXAMPLES: "True" #- Esto es para cargar los ejemplos
+  AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow #- cambia la metadata base por defeto de sql lite posgrest
+  AIRFLOW__CORE__FERNET_KEY: FB0o_zt4e3Ziq3LdUUO7F2Z95cvFFx16hU8jTeR1ASM= #- esto es de seguridad luego se explica
+  AIRFLOW__DAG_DEFAULT_VIEW: graph #- esto es para cambiar la vista por defecto lusgo aprendemos a que se refiere
+
+
+
+#/ Esto esta basado en cuatro contenedores 
+services:
+  #- Este levanta la db con al contra por defecto que esta en la linea 7
+  postgres:
+    image: postgres:11.5
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_DB: airflow
+      POSTGRES_PASSWORD: airflow
+  #-1.0 este contenedor init con la imagen de apache/airflow:1.10.10
+  init:
+    image: apache/airflow:1.10.10
+    environment:
+      <<: *airflow-environment
+    #- 1.1 que depende de la base de posgrest
+    depends_on:
+      - postgres
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./plugins:/opt/airflow/plugins
+      - ./logs:/opt/airflow/logs
+    entrypoint: /bin/bash
+    #- esto lo que hase es listar los usuario y si no exixten inicia la metadata de la db con un user
+    command: >
+      -c "airflow list_users || (airflow initdb
+      && airflow create_user --role Admin --username airflow --password airflow -e airflow@airflow.com -f airflow -l airflow)"
+    restart: on-failure
+
+  #/ este contenedor del servideo web que se monta en el puerto 8080
+  webserver:
+    image: apache/airflow:1.10.10
+    ports:
+      - 9090:8080 #- al paracer el puerto de este lado se queda ai si quertmeo cabier de puerto
+    environment:
+      <<: *airflow-environment
+    depends_on:
+      - init
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./plugins:/opt/airflow/plugins
+      - ./logs:/opt/airflow/logs
+    entrypoint: /bin/bash
+    #- Esto lo he dejado de esta forma para por si queremos instalar un paquete en pip que nececitemos solo hacemos asi
+    #! command: -c "airflow webserver && pip3 install s3fs --user"
+    command: -c "airflow webserver"
+    restart: always
+  
+  #/ este contenedor del scheduler tiene los mismo que el web server solo que no se espesifica el puerto 
+  scheduler:
+    image: apache/airflow:1.10.10
+    environment:
+      <<: *airflow-environment
+    depends_on:
+      - webserver
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./plugins:/opt/airflow/plugins
+      - ./logs:/opt/airflow/logs
+    entrypoint: /bin/bash
+    command: -c "airflow scheduler"
+    restart: always
