@@ -1,4 +1,4 @@
-
+""" 
 from datetime import datetime, timedelta 
 from airflow import DAG 
 from airflow.operators.empty import EmptyOperator
@@ -12,7 +12,7 @@ ENDPOINT = Variable.get('endpoint')
 
 TAGS = ['DeveloperJesus'] 
 DAG_ID = "VARIABLES" 
-DAG_DESCRIPTION = """ variables de entorno """
+DAG_DESCRIPTION = " variables de entorno "
 DAG_SCHEDULE = "40 20 * * *" 
 
 default_args = {
@@ -70,4 +70,4 @@ with dag as dag:
     )
 
 
-start_task >> first_task >> end_task 
+start_task >> first_task >> end_task  """
