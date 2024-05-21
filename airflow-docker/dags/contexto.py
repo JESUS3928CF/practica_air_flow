@@ -14,14 +14,12 @@ default_args = {'owner': dag_owner,
 
 #/ Aca definimos los parámetros
 params = {
-    'ENV': 'DEV',
-    'ID': '1234567890',
     'Manual': False
 }
 
 #/ el **kwargs es para poder acceder al contexto del dag
 def execute_task (**kwargs):
-    print(kwargs)
+    print(kwargs) #- para ver el contexto impreso
 
 with DAG(dag_id='contexto_dag',
         default_args=default_args,

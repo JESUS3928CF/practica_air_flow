@@ -80,8 +80,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/scripts:/opt/airflow/scripts
-    #! Asi en el archivo más actulizado
-    - ./variables.json:/otp/airflow/variables.json
+    - C:/Users/jesus.cochero/Downloads:/opt/airflow/external_data
   
 
 
@@ -125,7 +124,7 @@ services:
     <<: *airflow-common
     command: webserver
     ports:
-      - "8080:8080"
+      - "9292:8080"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
@@ -140,9 +139,7 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
-    #/ aca cambios
-    #command: scheduler   -- ANTES
-    command: -c "airflow variables -i /otp/airflow/variables.json && airflow scheduler" #- 
+    command: scheduler
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
       interval: 30s
