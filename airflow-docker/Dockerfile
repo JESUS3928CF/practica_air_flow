@@ -1,4 +1,4 @@
-FROM apache/airflow:latest
+FROM apache/airflow:2.9.0
 
 # Instala cualquier dependencia adicional necesaria para conectarte a MySQL
-RUN pip install mysql-connector-python
+RUN pip install pandas

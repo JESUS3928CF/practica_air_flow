@@ -2,11 +2,13 @@ version: "3.7"
 
   #/  Lo primero que vemos son algunas variables, es una caracteristica muy vacana y es que puede cojer la configuración desde las variables del sistema operativo 
 x-airflow-environment: &airflow-environment
-  AIRFLOW__CORE__EXECUTOR: LocalExecutor #- esto es para que se puedan ejecutar las tareas en paralelo
-  AIRFLOW__CORE__LOAD_EXAMPLES: "True" #- Esto es para cargar los ejemplos
-  AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow #- cambia la metadata base por defeto de sql lite posgrest
-  AIRFLOW__CORE__FERNET_KEY: FB0o_zt4e3Ziq3LdUUO7F2Z95cvFFx16hU8jTeR1ASM= #- esto es de seguridad luego se explica
-  AIRFLOW__DAG_DEFAULT_VIEW: graph #- esto es para cambiar la vista por defecto lusgo aprendemos a que se refiere
+  AIRFLOW__CORE__EXECUTOR: LocalExecutor 
+  AIRFLOW__CORE__LOAD_EXAMPLES: "True" 
+  AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow 
+  AIRFLOW__CORE__FERNET_KEY: FB0o_zt4e3Ziq3LdUUO7F2Z95cvFFx16hU8jTeR1ASM= 
+  AIRFLOW__DAG_DEFAULT_VIEW: graph 
+  #/ Por aca definimos la variable
+  AIRFLOW_VAR_EMAIL_PRUEBA: jesus@prueba2.com
 
 
 
@@ -38,11 +40,11 @@ services:
       && airflow create_user --role Admin --username airflow --password airflow -e airflow@airflow.com -f airflow -l airflow)"
     restart: on-failure
 
-  #/ este contenedor del servideo web que se monta en el puerto 8080
+  #! en el webserver y en el scheduler poner el volumen
   webserver:
     image: apache/airflow:1.10.10
     ports:
-      - 9090:8080 #- al paracer el puerto de este lado se queda ai si quertmeo cabier de puerto
+      - 9090:8080 
     environment:
       <<: *airflow-environment
     depends_on:
@@ -51,13 +53,13 @@ services:
       - ./dags:/opt/airflow/dags
       - ./plugins:/opt/airflow/plugins
       - ./logs:/opt/airflow/logs
+      #/ Desde aca creamos un volumen para importar las variables
+      - ./variables.json:/otp/airflow/variables.json
     entrypoint: /bin/bash
-    #- Esto lo he dejado de esta forma para por si queremos instalar un paquete en pip que nececitemos solo hacemos asi
-    #! command: -c "airflow webserver && pip3 install s3fs --user"
-    command: -c "airflow webserver"
+    #! aca ponemos el comando para importar las variables en el scheduler tambien
+    command: -c "airflow variables -i /otp/airflow/variables.json && airflow webserver"
     restart: always
   
-  #/ este contenedor del scheduler tiene los mismo que el web server solo que no se espesifica el puerto 
   scheduler:
     image: apache/airflow:1.10.10
     environment:
@@ -68,6 +70,9 @@ services:
       - ./dags:/opt/airflow/dags
       - ./plugins:/opt/airflow/plugins
       - ./logs:/opt/airflow/logs
+      #/ Desde aca creamos un volumen para importar las variables
+      - ./variables.json:/otp/airflow/variables.json
     entrypoint: /bin/bash
-    command: -c "airflow scheduler"
+    #/ aca cambios
+    command: -c "airflow variables -i /otp/airflow/variables.json && airflow scheduler"
     restart: always
