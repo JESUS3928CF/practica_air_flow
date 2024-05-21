@@ -1,8 +1,7 @@
-from airflow import DAG
-from airflow.decorators import task
-from airflow.operators.empty import EmptyOperator
+""" from airflow import DAG
 from datetime import datetime, timedelta 
 
+from airflow.operators.dummy_operator import DummyOperator 
 #/ Importar esto
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
@@ -30,7 +29,7 @@ with DAG(dag_id='',
         tags=['']
 ) :
 
-    start = EmptyOperator(task_id='start')
+    start = DummyOperator(task_id='start')
 
     PostgresOperator_task = PostgresOperator(
     task_id='PostgresOperator_task',
@@ -40,6 +39,6 @@ with DAG(dag_id='',
     runtime_parameters=None,
     )
 
-    end = EmptyOperator(task_id='end')
+    end = DummyOperator(task_id='end')
 
-    start >> PostgresOperator_task() >> end
+    start >> PostgresOperator_task() >> end """

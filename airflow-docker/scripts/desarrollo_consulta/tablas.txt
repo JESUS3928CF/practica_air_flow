@@ -1,0 +1,8 @@
+CREATE TABLE smo (
+    numero VARCHAR(15) PRIMARY KEY,
+    plan TEXT,
+    cd_plan VARCHAR(255),
+    fecha_consulta DATE,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
