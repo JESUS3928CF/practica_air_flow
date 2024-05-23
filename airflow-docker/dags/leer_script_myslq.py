@@ -37,7 +37,7 @@ with DAG(dag_id='leer_script_MySql',
         ''',
         database='data_warehouse'  # Nombre de la base de datos donde se creará la tabla
     )
-
+    
     #/ Asi leemos el script de nuestro volumen
     MySqlOperator_task = MySqlOperator(
         task_id='MySqlOperator_task',
