@@ -12,21 +12,19 @@ x-airflow-environment: &airflow-environment
 
 
 
-#/ Esto esta basado en cuatro contenedores 
 services:
-  #- Este levanta la db con al contra por defecto que esta en la linea 7
   postgres:
     image: postgres:11.5
     environment:
       POSTGRES_USER: airflow
       POSTGRES_DB: airflow
       POSTGRES_PASSWORD: airflow
-  #-1.0 este contenedor init con la imagen de apache/airflow:1.10.10
   init:
-    image: apache/airflow:1.10.10
+    #image: apache/airflow:1.10.10
+    #/ Esto lo que indica es que tiene que buscar un archivo Dokerfile al mismo nivel de el docker compose
+    build: .
     environment:
       <<: *airflow-environment
-    #- 1.1 que depende de la base de posgrest
     depends_on:
       - postgres
     volumes:
@@ -34,7 +32,6 @@ services:
       - ./plugins:/opt/airflow/plugins
       - ./logs:/opt/airflow/logs
     entrypoint: /bin/bash
-    #- esto lo que hase es listar los usuario y si no exixten inicia la metadata de la db con un user
     command: >
       -c "airflow list_users || (airflow initdb
       && airflow create_user --role Admin --username airflow --password airflow -e airflow@airflow.com -f airflow -l airflow)"
@@ -42,7 +39,8 @@ services:
 
   #! en el webserver y en el scheduler poner el volumen
   webserver:
-    image: apache/airflow:1.10.10
+    #image: apache/airflow:1.10.10
+    build: .
     ports:
       - 9090:8080 
     environment:
@@ -61,7 +59,8 @@ services:
     restart: always
   
   scheduler:
-    image: apache/airflow:1.10.10
+    build: .
+    #image: apache/airflow:1.10.10
     environment:
       <<: *airflow-environment
     depends_on:
