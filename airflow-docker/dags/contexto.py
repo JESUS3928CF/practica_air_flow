@@ -12,16 +12,20 @@ default_args = {'owner': dag_owner,
         'retry_delay': timedelta(minutes=2)
         }
 
-#/ Aca definimos los parámetros
 params = {
-    'ENV': 'DEV',
-    'ID': '1234567890',
     'Manual': False
 }
 
-#/ el **kwargs es para poder acceder al contexto del dag
-def execute_task (**kwargs):
-    print(kwargs)
+
+def first_task (**kwargs):
+    kwargs['ti'].xcom_push(key='color', value = 'Amarillo')
+
+#/step 2. y en el método lo revivimos como parámetro
+def execute_task (ds, color): #- también la recibimos como parámetro en el método 
+    print('Fecha de ejecución ', ds)
+    print('Color de la tarea anterior' , color)
+
+
 
 with DAG(dag_id='contexto_dag',
         default_args=default_args,
@@ -34,15 +38,23 @@ with DAG(dag_id='contexto_dag',
 
     start = EmptyOperator(task_id='start')
 
+    first_task = PythonOperator(
+        task_id="first_task",
+        python_callable=first_task,
+        provide_context=True
+    )
+
+    #-info Ahora como existen operadores que no reciben la funcionalidad de provide context pero si resiven parametros
+    #-info podemos utilizar el parametro op_kwargs para pasar el contexto
     python_task = PythonOperator(
         task_id="python_task",
-        python_callable=lambda: print('Hi from python operator'),
-        # op_kwargs: Optional[Dict] = None,
-        # op_args: Optional[List] = None,
-        # templates_dict: Optional[Dict] = None
-        # templates_exts: Optional[List] = None
+        python_callable=execute_task,
+        #provide_context=True
+        #/step 1) le damos el nombre y el valor por aca
+        op_kwargs={'ds': '{{ ds }}', #- esta es una variable por defecto del contexto
+                   'color': "{{ti.xcom_pull(task_ids='first_task', key='color')}}" }, #- asi extraemos una variable de otro operador, con la key y nombre del operador
     )
 
     end = EmptyOperator(task_id='end')
 
-    start >> task_1() >> end
+    start >> python_task >> end
