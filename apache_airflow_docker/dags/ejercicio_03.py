@@ -32,5 +32,3 @@ with DAG('dag_solucion_tarea_jinja',
         imprimir_fecha = BashOperator(task_id='imprimir_fecha',
                                       bash_command='echo {{ ti.xcom_pull(task_ids="obtener_fechas", key="fecha") }}'
                                       )
-        
-
